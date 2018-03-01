@@ -17,7 +17,7 @@ $this->title = 'My Yii Application';
     <div class="body-content">
 
         <?php foreach ($users as $user): ?>
-            <a href="<?php echo Url::to(['/user/profile/view', 'id' => $user->id]); ?>">
+            <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => $user->getNickname()]); ?>">
                 <?= $user->username; ?>
             </a>
            
