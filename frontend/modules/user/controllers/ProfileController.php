@@ -52,6 +52,20 @@ class ProfileController extends Controller {
         return ['success' => false, 'errors' => $model->getErrors()];
     }
 
+    public function actionDeletePicture(){
+        if(Yii::$app->user->isGuest){
+            return;
+        }
+        
+        $currentUser = Yii::$app->user->identity;
+        if($currentUser->deletePicture()){
+            Yii::$app->session->setFlash('success', 'Picture deleted');
+        }else{
+            Yii::$app->session->setFlash('danger', 'Error occured');
+        }
+        
+        return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
+    }
     /**
      * 
      * @param string $nickname

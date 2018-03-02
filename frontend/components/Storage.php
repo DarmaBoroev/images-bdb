@@ -7,7 +7,7 @@ use Yii;
 use yii\base\Component;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
-use Intervention\Image\ImageManager;
+
 
 /**
  * Description of Storage
@@ -18,27 +18,37 @@ class Storage extends Component implements StorageInterface {
 
     private $filename;
     
-    const ALLOWED_WIDTH = 1280;
-    const ALLOWED_HEIGHT = 1024;
-   
-
     /**
      * Save given UploadedFile instance to disk
      * @param UploadedFile $file
      * @return string
      */
     public function saveUploadedFile(UploadedFile $file) {
-        $prepareResult = $this->prepareFile($file);
         
         $path = $this->preparePath($file);
 
-        if ($prepareResult && $path && $file->saveAs($path)) {
+        if ($path && $file->saveAs($path)) {
             return $this->filename;
         }
     }
 
     public function getFile(string $filename) {
         return Yii::$app->params['storageUri'] . $filename;
+    }
+
+    /**
+     * 
+     * @param string $filename
+     * @return boolean
+     */
+    public function deleteFile(string $filename){
+        $file = $this->getStoragePath() . $filename;
+        
+        if(file_exists($file)){
+            return unlink($file);
+        }
+        
+        return true;
     }
 
     /**
@@ -55,20 +65,6 @@ class Storage extends Component implements StorageInterface {
         if (FileHelper::createDirectory(dirname($path))) {
             return $path;
         }
-    }
-
-    protected function prepareFile(UploadedFile $file) {
-        $manager = new ImageManager(array('driver' => 'imagick'));
-        $img = $manager->make($file->tempName);
-
-        if ($img->height() >= self::ALLOWED_HEIGHT) {
-            $img->resize(NULL, self::ALLOWED_HEIGHT);
-        }
-        if ($img->width() >= self::ALLOWED_WIDTH) {
-            $img->resize(self::ALLOWED_WIDTH, NULL);
-        }
-        
-        return $img->save($file->tempName);
     }
 
     /**
@@ -91,5 +87,7 @@ class Storage extends Component implements StorageInterface {
     protected function getStoragePath() {
         return Yii::getAlias(Yii::$app->params['storagePath']);
     }
+    
+    
 
 }
