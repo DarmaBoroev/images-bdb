@@ -2,7 +2,7 @@
 
 namespace frontend\modules\user\models\forms;
 use yii\base\Model;
-
+use Yii;
 /**
  * Description of PictureForm
  *
@@ -16,6 +16,7 @@ class PictureForm extends Model{
             [['picture'], 'file',
                 'extensions' => ['jpg'],
                 'checkExtensionByMimeType' => true,
+                'maxSize' => Yii::$app->params['maxSizeFile'],
             ],
         ];
     }

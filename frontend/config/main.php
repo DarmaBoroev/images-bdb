@@ -52,6 +52,9 @@ return [
         'storage' => [
             'class' => 'frontend\components\Storage',
         ],
+        'image' => [
+            'class' => 'frontend\components\Image',
+        ]
         
         
     ],
