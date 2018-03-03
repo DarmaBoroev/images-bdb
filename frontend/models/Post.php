@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use frontend\models\User;
 
 /**
  * This is the model class for table "post".
@@ -35,5 +36,21 @@ class Post extends \yii\db\ActiveRecord
             'description' => 'Description',
             'created_at' => 'Created At',
         ];
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getImage(){
+        return Yii::$app->storage->getFile($this->filename);
+    }
+    
+    /**
+     * get author of the post
+     * @return User|null
+     */
+    public function getUser(){
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
