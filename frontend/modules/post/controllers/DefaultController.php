@@ -9,6 +9,9 @@ use yii\web\UploadedFile;
 use frontend\models\Post;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use frontend\modules\post\models\forms\CommentForm;
+use frontend\models\Comment;
+
 /**
  * Default controller for the `post` module
  */
@@ -40,12 +43,19 @@ class DefaultController extends Controller {
      * @return string
      */
     public function actionView($id) {
-        
+
         $currentUser = Yii::$app->user->identity;
-        return $this->render('view',[
-            'post' => $this->findPost($id),
-            'currentUser' => $currentUser,
-            
+        $commentModel = new CommentForm();
+        
+        if($commentModel->load(Yii::$app->request->post())) {
+                $commentModel->save();
+        }
+        
+        return $this->render('view', [
+                    'post' => $this->findPost($id),
+                    'commentModel' => $commentModel,
+                    'comments' => Comment::findAll(['status' => 1]),
+                    'currentUser' => $currentUser,
         ]);
     }
     
@@ -53,51 +63,52 @@ class DefaultController extends Controller {
      * 
      * @return array
      */
-    public function actionLike(){
-        if(Yii::$app->user->isGuest){
+    public function actionLike() {
+        if (Yii::$app->user->isGuest) {
             return $this->redirect(['/user/default/login']);
         }
-        
+
         Yii::$app->response->format = Response::FORMAT_JSON;
-        
+
         $currentUser = Yii::$app->user->identity;
-        
+
         $id = Yii::$app->request->post('id');
-        
+
         $post = $this->findPost($id);
-        
+
         $post->like($currentUser);
-        
+
         return [
             'success' => true,
             'likesCount' => $post->countLikes(),
         ];
     }
-    
+
     /**
      * 
      * @return array
      */
-    public function actionUnlike(){
-        if(Yii::$app->user->isGuest){
+    public function actionUnlike() {
+        if (Yii::$app->user->isGuest) {
             return $this->redirect(['/user/default/login']);
         }
-        
+
         Yii::$app->response->format = Response::FORMAT_JSON;
-        
+
         $currentUser = Yii::$app->user->identity;
-        
+
         $id = Yii::$app->request->post('id');
-        
+
         $post = $this->findPost($id);
-        
+
         $post->unlike($currentUser);
-        
+
         return [
             'success' => true,
             'likesCount' => $post->countLikes(),
         ];
     }
+
     /**
      * 
      * @param integer $id

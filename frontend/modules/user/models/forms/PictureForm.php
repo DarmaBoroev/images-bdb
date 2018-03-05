@@ -11,6 +11,7 @@ use Intervention\Image\ImageManager;
  */
 class PictureForm extends Model{
     public $picture;
+    public $small_picture;
     
     public function rules() {
         return [

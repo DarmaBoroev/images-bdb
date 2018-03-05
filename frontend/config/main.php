@@ -18,6 +18,9 @@ return [
         'post' => [
             'class' => 'frontend\modules\post\Module',
         ],
+        'comment' => [
+            'class' => 'frontend\modules\comment\Module',
+        ],
     ],
     'components' => [
         'request' => [
