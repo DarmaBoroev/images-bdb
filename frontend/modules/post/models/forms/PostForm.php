@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use frontend\models\Post;
 use frontend\models\User;
+use Intervention\Image\ImageManager;
+use frontend\models\events\PostCreatedEvent;
 
 /**
  * Description of postForm
@@ -14,6 +16,7 @@ use frontend\models\User;
  */
 class PostForm extends Model{
     const MAX_DESCRIPTION_LENGTH = 1000;
+    const EVENT_POST_CREATED = 'post_created';
     
     public $picture;
     public $description;
@@ -33,6 +36,30 @@ class PostForm extends Model{
     
     public function __construct(User $user) {
         $this->user = $user;
+        $this->on(self::EVENT_AFTER_VALIDATE, [$this, 'resizePicture']);
+        $this->on(self::EVENT_POST_CREATED, [Yii::$app->feedService, 'addToFeeds']);
+    }
+
+    /**
+     * Resize image if needed
+     */
+    public function resizePicture(){
+        if($this->picture->error){
+            return;
+        }
+        
+        $width = Yii::$app->params['profilePicture']['maxWidth'];
+        $height = Yii::$app->params['profilePicture']['maxHeight'];
+        
+        $manager = new ImageManager(array('driver' => 'imagick'));
+        
+        $image = $manager->make($this->picture->tempName);
+        
+        $image->resize($width, $height, function($constraint){
+            $constraint->aspectRatio();
+            $constraint->upsize();
+            
+        })->save();
     }
     
     public function save(){
@@ -41,7 +68,14 @@ class PostForm extends Model{
             $post->description = $this->description;
             $post->filename = Yii::$app->storage->saveUploadedFile($this->picture);
             $post->user_id = $this->user->getId();
-            return $post->save(false);
+            if($post->save(false)){
+                $event = new PostCreatedEvent();
+                $event->user = $this->user;
+                $event->post = $post;
+                $this->trigger(self::EVENT_POST_CREATED, $event);
+                return true;
+            }
+            return false;
         }
     }
     
