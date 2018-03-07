@@ -33,7 +33,7 @@ class DefaultController extends Controller {
             }
         }
         return $this->render('create', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -48,13 +48,12 @@ class DefaultController extends Controller {
         $commentModel = new CommentForm();
         
         if($commentModel->load(Yii::$app->request->post())) {
-                $commentModel->save();
+            $commentModel->save();
         }
         
         return $this->render('view', [
                     'post' => $this->findPost($id),
                     'commentModel' => $commentModel,
-                    'comments' => Comment::findAll(['status' => 1]),
                     'currentUser' => $currentUser,
         ]);
     }

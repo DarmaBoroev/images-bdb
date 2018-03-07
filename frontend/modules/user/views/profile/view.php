@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
 use dosamigos\fileupload\FileUpload;
+use yii\web\JqueryAsset;
 ?>
 
 <h3><?php echo Html::encode($user->username); ?></h3>
@@ -149,3 +150,46 @@ use dosamigos\fileupload\FileUpload;
         </div>
     </div>
 </div>
+
+<br><br>
+
+<div class="posts">
+
+        <?php foreach ($user->getPosts() as $post): ?>
+            <?php /* @var $post frontend\models\Post */ ?>
+    
+            <div class="col-md-12">
+     
+                <a href="<?php echo Url::to(['/post/default/view', 'id' => $post->id]);?>"><img src="<?php echo Yii::$app->storage->getFile($post->filename); ?>" /></a>  
+                <div class="col-md-12">
+                    <?php echo HtmlPurifier::process($post->description); ?>
+                </div>                
+
+                <div class="col-md-12">
+                    <?php echo Yii::$app->formatter->asDatetime($post->created_at); ?>
+                </div>
+                                
+                <div class="col-md-12">
+                    Likes: <span class="likes-count"><?php echo $post->countLikes(); ?></span>
+                    
+                    <a href="#" class="btn btn-primary button-unlike <?php echo ($user->likesPost($post->id)) ? "" : "display-none" ;?>" data-id="<?php echo $post->id;?>">
+                        Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                    </a>
+                    <a href="#" class="btn btn-primary button-like <?php echo ($user->likesPost($post->id)) ? "display-none" : "";?>" data-id="<?php echo $post->id;?>">
+                        Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                    </a>
+                </div>
+                
+                <div class="col-md-12">
+                    <a href="<?php echo Url::to(['/post/default/view', 'id' => $post->getId()]);?>"><?php echo $post->countComments();?> Comments</a>
+                </div>
+                
+            </div>    
+            <div class="col-md-12"><hr/></div>            
+        <?php endforeach; ?>
+            
+</div>
+
+<?php $this->registerJsFile('@web/js/likes.js', [
+    'depends' => JqueryAsset::className(),
+]);

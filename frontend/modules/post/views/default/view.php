@@ -61,10 +61,10 @@ $this->registerJsFile('@web/js/comment.js', [
         <div class="row">
             <div class="col-md-12">
                 <div class="page-header">
-                    <h3><small class="pull-right"><?php echo count($comments);?> </small> Comments </h3>
+                    <h3><small class="pull-right"><?php echo $post->countComments();?> </small> Comments </h3>
                 </div> 
                 <div class="comments-list">
-                    <?php foreach ($comments as $comment): ?>
+                    <?php foreach ($post->getComments() as $comment): ?>
                         <div class="media">
                             <p class="pull-right"><small><?php echo $comment->getDate();?></small></p>
                             <a class="media-left" href="<?php echo Url::to(['/user/profile/view', 'nickname' => $comment->user->getNickname()]);?>">

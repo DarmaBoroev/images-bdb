@@ -30,7 +30,10 @@ class CommentForm extends Model{
             $comment->user_id = intval($this->user_id);
             $comment->text = $this->text;
             $comment->post_id = intval($this->post_id);
-            $comment->save();
+            if($comment->save()){
+                $comment->incrCounter();
+            }
+            
         }
     }
 }

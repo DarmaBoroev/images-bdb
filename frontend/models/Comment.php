@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\User;
+
 /**
  * This is the model class for table "comment".
  *
@@ -15,33 +16,28 @@ use frontend\models\User;
  * @property int $created_at
  * @property int $updated_at
  */
-class Comment extends \yii\db\ActiveRecord
-{
+class Comment extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'comment';
     }
-    
-      /**
+
+    /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             TimestampBehavior::className(),
         ];
     }
 
-
-
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'post_id' => 'Post ID',
@@ -51,20 +47,23 @@ class Comment extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
-    
-    public function getDate(){
+
+    public function getDate() {
         return Yii::$app->formatter->asDate($this->created_at);
     }
-    
-    public function countComment(){
-        return $this->find()->count();
-    }
-    
+
     /**
      * 
      * @return User
      */
-    public function getUser(){
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    
+    public function incrCounter() {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $redis->incr("post:{$this->post_id}:comments");
+    }
+    
 }

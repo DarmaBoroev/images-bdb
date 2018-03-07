@@ -114,4 +114,20 @@ class Post extends ActiveRecord {
         return $redis->sismember("likes:{$this->getId()}:likes", $user->getId());
     }
 
+    public function getComments() {
+        $condition1 = ['post_id' => $this->id];
+        $condition2 = ['status' => 1];
+        return Comment::find()->where($condition1)->andWhere($condition2)->all();
+    }
+
+    public function countComments() {
+        $redis = Yii::$app->redis;
+        return $redis->get("post:{$this->id}:comments");
+    }
+
+    public function setCommentCounter() {
+        $redis = Yii::$app->redis;
+        $redis->set("post:{$this->id}:comments", 0);
+    }
+
 }

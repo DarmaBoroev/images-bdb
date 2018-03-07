@@ -334,4 +334,13 @@ class User extends ActiveRecord implements IdentityInterface
         return (bool) $redis->sismember("user:{$this->getId()}:likes", $postId);
     }
     
+    /**
+     * Get posts of current User
+     * @param \frontend\models\User $user
+     */
+    public function getPosts(){
+        $order = ['created_at' => SORT_DESC];
+        return $this->hasMany(Post::className(), ['user_id' => 'id'])->orderBy($order)->all();
+    }
+    
 }

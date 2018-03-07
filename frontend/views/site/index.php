@@ -45,6 +45,10 @@ $this->title = 'My Yii Application';
                     </a>
                 </div>
                 
+                <div class="col-md-12">
+                    <a href="<?php echo Url::to(['/post/default/view', 'id' => $feedItem->post_id]);?>"><?php echo $feedItem->countComments();?> Comments</a>
+                </div>
+                
             </div>    
             <div class="col-md-12"><hr/></div>            
         <?php endforeach; ?>
