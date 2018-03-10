@@ -130,4 +130,7 @@ class Post extends ActiveRecord {
         $redis->set("post:{$this->id}:comments", 0);
     }
 
+    public function getDate(){
+        return Yii::$app->formatter->asDate($this->created_at);
+    }
 }

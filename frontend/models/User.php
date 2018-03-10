@@ -335,6 +335,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     /**
+     * Get post count
+     * @return integer
+     */
+    public function getPostCount(){
+        return $this->hasMany(Post::className(), ['user_id' => 'id'])->count();
+    }
+    
+    /**
      * Get posts of current User
      * @param \frontend\models\User $user
      */
