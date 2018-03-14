@@ -28,7 +28,6 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        
         if(Yii::$app->user->isGuest){
             return $this->redirect(['/user/default/login']);
         }
@@ -43,6 +42,10 @@ class SiteController extends Controller {
             'feedItems' => $feedItems,
             'currentUser' => $currentUser
         ]);
+    }
+    
+    public function actionAbout(){
+        return $this->render('about');
     }
 
 }
