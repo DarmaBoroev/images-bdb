@@ -56,8 +56,11 @@ $this->title = Html::encode($user->username);
                         </div>
                         
                         <?php if ($currentUser && !$currentUser->equals($user)): ?>
-                            <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
-                            <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Unsubscribe</a>
+                            <?php if($currentUser->isFollowing($user->getId())):?>
+                                <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Unsubscribe</a>
+                            <?php else:?>
+                                <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info" >Subscribe</a>
+                            <?php endif;?>
                             <hr>
                             <h5>Friends, who are also following <?php echo Html::encode($user->username); ?>: </h5>
                             <div class="row">

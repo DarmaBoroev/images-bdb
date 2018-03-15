@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property string $filename
  * @property string $description
  * @property int $created_at
+ * @property int $complaints
  */
 class Post extends ActiveRecord {
 
@@ -52,7 +53,7 @@ class Post extends ActiveRecord {
     }
 
     /**
-     * 
+     * Get image name
      * @return string
      */
     public function getImage() {
@@ -104,7 +105,7 @@ class Post extends ActiveRecord {
     }
 
     /**
-     * 
+     * Check whether given user liked current post
      * @param User $user
      * @return boolean
      */
@@ -114,12 +115,20 @@ class Post extends ActiveRecord {
         return $redis->sismember("likes:{$this->getId()}:likes", $user->getId());
     }
 
+    /**
+     * Get comments
+     * @return array
+     */
     public function getComments() {
         $condition1 = ['post_id' => $this->id];
         $condition2 = ['status' => 1];
         return Comment::find()->where($condition1)->andWhere($condition2)->all();
     }
 
+    /**
+     * 
+     * @return int
+     */
     public function countComments() {
         $redis = Yii::$app->redis;
         return $redis->get("post:{$this->id}:comments");
@@ -130,7 +139,28 @@ class Post extends ActiveRecord {
         $redis->set("post:{$this->id}:comments", 0);
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function getDate(){
         return Yii::$app->formatter->asDate($this->created_at);
+    }
+    
+    /**
+     * Add complaint to post from given user
+     * @param User $user
+     * @return boolean
+     */
+    public function complain(User $user){
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $key = "post:{$this->getId()}:complaints";
+        
+        if(!$redis->sismember($key, $user->getId())){
+            $redis->sadd($key, $user->getId());
+            $this->complaints++;
+            return $this->save(false, ['complaints']);
+        }
     }
 }

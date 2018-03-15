@@ -57,4 +57,10 @@ class Feed extends \yii\db\ActiveRecord
         $redis = Yii::$app->redis;
         return $redis->get("post:{$this->post_id}:comments");
     }
+    
+    public function isReported(User $user){
+        /* @var $redus Connection */
+        $redis = Yii::$app->redis;
+        return (bool) $redis->sismember("post:{$this->post_id}:complaints", $user->getId());
+    }
 }
