@@ -12,5 +12,4 @@ class LanguageSelector implements BootstrapInterface {
             $app->language = $app->request->cookies['language'];
         }
     }
-    
 }

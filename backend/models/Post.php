@@ -56,4 +56,16 @@ class Post extends \yii\db\ActiveRecord
         $this->complaints = 0;
         return $this->save(false, ['complaints']);
     }
+    
+    public function deleteRecordsInRedis(){
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $commentsKey = "post:{$this->id}:comments";
+        $likesKey = "post:{$this->id}:likes";
+        $complaintsKey = "post:{$this->id}:complaints";
+        
+        $redis->del($commentsKey);
+        $redis->del($likesKey);
+        $redis->del($complaintsKey);
+    }
 }

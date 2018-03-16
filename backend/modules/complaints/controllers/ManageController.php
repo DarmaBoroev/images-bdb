@@ -56,8 +56,7 @@ class ManageController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
-
+    
     /**
      * Deletes an existing Post model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -67,8 +66,12 @@ class ManageController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        /* @var $post Post */
+        $post = $this->findModel($id);
+        if($post->delete()){
+            $post->deleteRecordsInRedis();
+        }
+        
         return $this->redirect(['index']);
     }
 
