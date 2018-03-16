@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use frontend\models\User;
+use yii\web\Cookie;
 
 /**
  * Site controller
@@ -48,4 +49,25 @@ class SiteController extends Controller {
         return $this->render('about');
     }
 
+    /**
+     * Change app language and save in cookie
+     */
+    public function actionLanguage(){
+        $language = Yii::$app->request->post('language');
+        
+        if(in_array($language, Yii::$app->params['supportedLanguages'])){
+            Yii::$app->language = $language;
+            
+            $languageCookie = new Cookie([
+                'name' => 'language',
+                'value' => $language,
+                'expire' => time() + 60 * 60 * 24 * 30, //30 days
+            ]);
+            Yii::$app->response->cookies->add($languageCookie);
+            
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        Yii::$app->session->setFlash('danger', 'Incorrect language');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 }
