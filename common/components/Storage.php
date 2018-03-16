@@ -1,8 +1,8 @@
 <?php
 
-namespace frontend\components;
+namespace common\components;
 
-use frontend\components\StorageInterface;
+use common\components\StorageInterface;
 use Yii;
 use yii\base\Component;
 use yii\web\UploadedFile;
