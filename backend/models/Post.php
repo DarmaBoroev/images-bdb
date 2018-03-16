@@ -47,6 +47,10 @@ class Post extends \yii\db\ActiveRecord
         return Yii::$app->storage->getFile($this->filename);
     }
     
+    /**
+     * Delete complaints record of Post in redis and nullifies complaints field in record(in DB) 
+     * @return boolean
+     */
     public function approve(){
         /*@var $redis Connection */
         $redis = Yii::$app->redis;
@@ -57,6 +61,9 @@ class Post extends \yii\db\ActiveRecord
         return $this->save(false, ['complaints']);
     }
     
+    /**
+     * Delete related data of post in Redis
+     */
     public function deleteRecordsInRedis(){
         /* @var $redis Connection */
         $redis = Yii::$app->redis;

@@ -75,6 +75,10 @@ class ManageController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Approve post complaints
+     * @param type $id
+     */
     public function actionApprove($id){
         $post = $this->findModel($id);
         if($post->approve()){
