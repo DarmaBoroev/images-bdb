@@ -108,6 +108,10 @@ class DefaultController extends Controller {
         ];
     }
     
+    /**
+     * Add complain to post
+     * @return array
+     */
     public function actionComplain(){
         if(Yii::$app->user->isGuest){
             return $this->redirect(['/user/default/login']);
