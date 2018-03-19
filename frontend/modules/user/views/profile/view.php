@@ -24,27 +24,7 @@ $this->title = Html::encode($user->username);
                             <img src="<?php echo $user->getPicture(); ?>" id="profile-picture" class="author-image" />
                             <div class="author-name"><?php echo Html::encode($user->username); ?></div>
                             <?php if ($currentUser && $currentUser->equals($user)): ?>
-                                <?=
-                                FileUpload::widget([
-                                    'model' => $modelPicture,
-                                    'attribute' => 'picture',
-                                    'url' => ['/user/profile/upload-picture'], // your url, this is just for demo purposes,
-                                    'options' => ['accept' => 'image/*'],
-                                    'clientEvents' => [
-                                        'fileuploaddone' => 'function(e, data) {
-                                            if(data.result.success){
-                                                 $("#profile-image-success").show();
-                                                 $("#profile-image-fail").hide();
-                                                 $("#profile-picture").attr("src", data.result.pictureUri);
-                                            }else{
-                                                 $("#profile-image-fail").html(data.result.errors.picture).show();
-                                                 $("#pfofile-image-success").hide();
-                                            }
-                                         }',
-                                    ],
-                                ]);
-                                ?>
-                            
+                                <a href="<?= Url::to(['/user/profile/update']) ?>" class="btn btn-default"><?= Yii::t('user/view', 'Edit profile') ?></a>
                             <?php endif;?>
                             <!--<a href="#" class="btn btn-default">Upload profile image</a>-->
                             

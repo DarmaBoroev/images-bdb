@@ -9,7 +9,8 @@ use yii\web\NotFoundHttpException;
 use frontend\modules\user\models\forms\PictureForm;
 use yii\web\UploadedFile;
 use yii\web\Response;
-use frontend\modules\user\models\forms\EditForm;
+use frontend\modules\user\models\forms\UpdateForm;
+use frontend\modules\user\models\forms\PasswordChangeForm;
 
 
 /**
@@ -68,16 +69,33 @@ class ProfileController extends Controller {
         return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
     }
     
-    public function actionEdit($id){
+    public function actionUpdate(){
         $user = Yii::$app->user->identity;
-        $model = new EditForm($user);
-        if($model->load(Yii::$app->request->post()) && $model->save()){
+        $model = new UpdateForm($user);
+        $modelPicture = new PictureForm();
+        if($model->load(Yii::$app->request->post()) && $model->update()){
             
             Yii::$app->session->setFlash('success', 'Profile updated');
-            return $this->redirect(['/user/profile/view', 'id' => $id]);
+            return $this->redirect(['/user/profile/view', 'nickname' => $user->getId()]);
         }
         
-        return $this->render('edit',[
+        return $this->render('update',[
+            'model' => $model,
+            'modelPicture' => $modelPicture,
+            'user' => $user,
+        ]);
+    }
+    
+    public function actionPasswordChange(){
+        $user = Yii::$app->user->identity;
+        $model = new PasswordChangeForm($user);
+        
+        if($model->load(Yii::$app->request->post()) && $model->changePassword()){
+            Yii::$app->session->setFlash('success', Yii::t('user/view', 'Password success changed'));
+            return $this->redirect(['/user/profile/update']);
+        }
+        
+        return $this->render('passwordChange', [
             'model' => $model,
         ]);
     }
