@@ -32,19 +32,19 @@ $this->title = Html::encode($user->username);
                                     'options' => ['accept' => 'image/*'],
                                     'clientEvents' => [
                                         'fileuploaddone' => 'function(e, data) {
-                                   if(data.result.success){
-                                        $("#profile-image-success").show();
-                                        $("#profile-image-fail").hide();
-                                        $("#profile-picture").attr("src", data.result.pictureUri);
-                                   }else{
-                                        $("#profile-image-fail").html(data.result.errors.picture).show();
-                                        $("#pfofile-image-success").hide();
-                                   }
-                                }',
+                                            if(data.result.success){
+                                                 $("#profile-image-success").show();
+                                                 $("#profile-image-fail").hide();
+                                                 $("#profile-picture").attr("src", data.result.pictureUri);
+                                            }else{
+                                                 $("#profile-image-fail").html(data.result.errors.picture).show();
+                                                 $("#pfofile-image-success").hide();
+                                            }
+                                         }',
                                     ],
                                 ]);
                                 ?>
-                                <a href="#" class="btn btn-default">Edit profile</a>
+                            
                             <?php endif;?>
                             <!--<a href="#" class="btn btn-default">Upload profile image</a>-->
                             
@@ -84,14 +84,14 @@ $this->title = Html::encode($user->username);
                                 <span><?php echo $user->getPostCount();?> posts</span>
                             </div>
                             <div class="profile-followers">
-                                <a href="#" data-toggle="modal" data-target="#myModal2"><?php echo $user->countFollowers(); ?> followers</a>
+                                <a href="#" data-toggle="modal" data-target="#myModal2"><?php echo $user->countFollowers();?> followers</a>
                             </div>
                             <div class="profile-following">
-                                <a href="#" data-toggle="modal" data-target="#myModal1"><?php echo $user->countSubscribtions(); ?> following</a>    
+                                <a href="#" data-toggle="modal" data-target="#myModal1"><?php echo $user->countSubscribtions(); ?> following</a>
                             </div>
                         </div>
                     </article>
-
+                    
                     <div class="col-sm-12 col-xs-12">
                         <div class="row profile-posts">
                             <?php foreach($user->getPosts() as $post):?>

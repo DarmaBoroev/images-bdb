@@ -6,13 +6,13 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = Yii::t('user/login', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p><?= Yii::t('user/login', 'Please fill out the following fields to login') ?>:</p>
 
     <div class="row">
         <div class="col-lg-5">
@@ -25,17 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
             <div style="color:#999;margin:1em 0">
-                If you forgot your password you can <?= Html::a('reset it', ['/user/default/request-password-reset']) ?>.
+                <?= Yii::t('user/login', 'If you forgot your password you can') ?> <?= Html::a(Yii::t('user/login', 'reset it') , ['/user/default/request-password-reset']) ?>.
             </div>
 
             <div class="form-group">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <?= Html::submitButton(Yii::t('user/login', 'Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
-
+            <br/><br/>
             <?php ActiveForm::end(); ?>
         </div>
-        <div class="col-lg-10">
-            <h3>Login with Facebook</h3>
+        <div class="col-lg-5">
+            <h3><?= Yii::t('user/login', 'Login with Facebook') ?></h3>
             <?=
             yii\authclient\widgets\AuthChoice::widget([
                 'baseAuthUrl' => ['/user/default/auth'],
@@ -43,5 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ])
             ?>
         </div>
+        
     </div>
 </div>
