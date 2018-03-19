@@ -46,10 +46,10 @@ $this->title = 'Newsfeed';
                                         <span class="likes-count"><?php echo $feedItem->countLikes(); ?></span>
                                         &nbsp;&nbsp;&nbsp;
                                         <a href="#" class="btn btn-default button-unlike <?php echo ($currentUser->likesPost($feedItem->post_id)) ? "" : "display-none"; ?>" data-id="<?php echo $feedItem->post_id; ?>">
-                                            Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                                            <?= Yii::t('post/view', 'Unlike') ?>&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
                                         </a>
                                          <a href="#" class="btn btn-default button-like <?php echo ($currentUser->likesPost($feedItem->post_id)) ? "display-none" : ""; ?>" data-id="<?php echo $feedItem->post_id; ?>">
-                                            Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                                            <?= Yii::t('post/view', 'Like') ?>&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
                                         </a>
                                     </div>
                                     <div class="post-comments">
@@ -61,10 +61,10 @@ $this->title = 'Newsfeed';
                                     <div class="post-report">
                                         <?php if(!$feedItem->isReported($currentUser)):?>
                                             <a href="#" class="btn btn-default button-complain" data-id="<?php echo $feedItem->post_id;?>">
-                                                Report post <i class="fa fa-cog fa-spin fa-fw icon-preloader" style="display:none"></i>
+                                                <?= Yii::t('post/view', 'Report post') ?> <i class="fa fa-cog fa-spin fa-fw icon-preloader" style="display:none"></i>
                                             </a>
                                         <?php else:?>
-                                            <p>Post has been reported!</p>
+                                        <p><?= Yii::t('post/view', 'Post has been reported!') ?></p>
                                         <?php endif;?>
                                     </div>
                                 </div>

@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use frontend\modules\user\models\forms\PictureForm;
 use yii\web\UploadedFile;
 use yii\web\Response;
+use frontend\modules\user\models\forms\EditForm;
 
 
 /**
@@ -65,6 +66,27 @@ class ProfileController extends Controller {
         }
         
         return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
+    }
+    
+    public function actionEdit($id){
+        $user = Yii::$app->user->identity;
+        $model = new EditForm($user);
+        if($model->load(Yii::$app->request->post()) && $model->save()){
+            
+            Yii::$app->session->setFlash('success', 'Profile updated');
+            return $this->redirect(['/user/profile/view', 'id' => $id]);
+        }
+        
+        return $this->render('edit',[
+            'model' => $model,
+        ]);
+    }
+    
+    protected function findModel($id){
+        if(($model = User::findOne($id)) !== null){
+            return $model;
+        }
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
     /**
      * 
