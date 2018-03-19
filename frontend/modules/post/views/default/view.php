@@ -2,7 +2,7 @@
 /* @var $post frontend\models\Post */
 /* @var $this yii\base\View */
 /* @var $currentUser frontend\models\User */
-/* @var $comments frontend\models\Comment */
+/* @var $comments[] frontend\models\Comment */
 
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
@@ -52,11 +52,11 @@ $this->registerJsFile('@web/js/comment.js', [
                                 <i class="fa fa-lg fa-heart-o"></i>
                                 <span class="likes-count"><?php echo $post->countLikes(); ?></span>
                                 &nbsp;&nbsp;&nbsp;
-                                <a href="#" class="btn btn-default button-unlike <?php echo ($currentUser && $post->isLikedBy($currentUser)) ? "display-none" : ""; ?>" data-id="<?php echo $post->getId(); ?>">
-                                    Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                                <a href="#" class="btn btn-default button-unlike <?php echo ($currentUser && $post->isLikedBy($currentUser)) ? "" : "display-none"; ?>" data-id="<?php echo $post->getId(); ?>">
+                                    <?php echo Yii::t('post/view', 'Unlike');?>&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
                                 </a>
-                                <a href="#" class="btn btn-default button-like <?php echo ($currentUser && $post->isLikedBy($currentUser)) ? "" : "display-none"; ?>" data-id="<?php echo $post->getId(); ?>">
-                                    Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                                <a href="#" class="btn btn-default button-like <?php echo ($currentUser && $post->isLikedBy($currentUser)) ? "display-none" : ""; ?>" data-id="<?php echo $post->getId(); ?>">
+                                    <?php echo Yii::t('post/view', 'Like');?>&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
                                 </a>
                             </div>
                             &nbsp;&nbsp;
@@ -64,7 +64,7 @@ $this->registerJsFile('@web/js/comment.js', [
                                 <span><?php echo $post->getDate();?></span>    
                             </div>
                             <div class="post-report">
-                                <a href="#">Report post</a>    
+                                <a href="#"><?php echo Yii::t('post/view', 'Report post');?></a>    
                             </div>
                         </div>
                     </article>
@@ -81,7 +81,7 @@ $this->registerJsFile('@web/js/comment.js', [
             <div class="col-md-12">
 
                     <div class="page-header">
-                        <h3><small class="pull-right"><?php echo $post->countComments(); ?> </small> Comments </h3>
+                        <h3><small class="pull-right"><?php echo $post->countComments(); ?> </small><?php echo Yii::t('post/view', 'Comments');?> </h3>
                     </div> 
                     <div class="comments-list">
 
@@ -95,11 +95,12 @@ $this->registerJsFile('@web/js/comment.js', [
 
                                     <h4 class="media-heading user_name"><?php echo Html::encode($comment->user->username); ?></h4>
                                     <?php echo Html::encode($comment->text); ?>
-
-                                    <p><small><a href=""></a><a href=""></a></small></p>
+                                    
+                                    <p><small></a><a href=""></a></small></p>
                                 </div>
+                                    
                             </div>
-                        <?php endforeach; ?>
+                        <?php endforeach; ?>    
 
                     </div>
 
@@ -110,7 +111,7 @@ $this->registerJsFile('@web/js/comment.js', [
 <br/><br/>
 <div class="col-sm-12 col-xs-12">
     <div class="comment-respond">
-        <h4>Comment:</h4>
+        <h4><?php echo Yii::t('post/view', 'Comment');?>:</h4>
         <?php Pjax::begin(['id' => 'new_comment']); ?>
         <?php $form = ActiveForm::begin(['id' => 'comment-create', 'options' => ['data-pjax' => true]]); ?>
         <p class="comment-form-comment">
@@ -118,14 +119,14 @@ $this->registerJsFile('@web/js/comment.js', [
             $form->field($commentModel, 'text')->textarea([
                 'rows' => 6,
                 'class' => "form-control",
-                'placeholder' => 'Type your comment',
+                'placeholder' => Yii::t('post/view', 'Type your comment'),
                 "aria-required" => true])->label(false);
             ?>
             <?= $form->field($commentModel, 'post_id')->hiddenInput(['value' => $post->id])->label(false); ?>
             <?= $form->field($commentModel, 'user_id')->hiddenInput(['value' => $currentUser->id])->label(false); ?>
         </p>
         <p class="form-submit">
-            <?= Html::submitButton('Send', ['name' => 'create-comment-button', 'class' => 'btn btn-secondary']); ?>
+            <?= Html::submitButton(Yii::t('post/view', 'Send'), ['name' => 'create-comment-button', 'class' => 'btn btn-secondary']); ?>
         </p>				
         <?php ActiveForm::end(); ?>
         <?php Pjax::end(); ?>

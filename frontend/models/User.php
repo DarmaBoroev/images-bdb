@@ -350,5 +350,5 @@ class User extends ActiveRecord implements IdentityInterface
         $order = ['created_at' => SORT_DESC];
         return $this->hasMany(Post::className(), ['user_id' => 'id'])->orderBy($order)->all();
     }
-    
+  
 }

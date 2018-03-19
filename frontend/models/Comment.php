@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\User;
+use frontend\models\Post;
 
 /**
  * This is the model class for table "comment".
@@ -25,6 +26,17 @@ class Comment extends \yii\db\ActiveRecord {
         return 'comment';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['text', 'post_id', 'user_id'], 'required'],
+            [['text'], 'string'],
+        ];
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -60,10 +72,34 @@ class Comment extends \yii\db\ActiveRecord {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
     
+    
+    public function getPost(){
+        return $this->hasOne(Post::className(), ['id' => 'post_id']);
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        $this->incrCounter();
+        $this->text = "";
+        parent::afterSave($insert, $changedAttributes);
+    }
+    
+    public function afterDelete() {
+        $this->decrCounter();
+        parent::afterDelete();
+    }
+    
     public function incrCounter() {
         /* @var $redis Connection */
         $redis = Yii::$app->redis;
         $redis->incr("post:{$this->post_id}:comments");
+    }
+    
+    public function decrCounter(){
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        if($redis->get("post:{$this->post_id}:comments")){
+            $redis->decr("post:{$this->post_id}:comments");
+        }
     }
     
 }

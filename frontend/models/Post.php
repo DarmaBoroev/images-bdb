@@ -7,6 +7,7 @@ use frontend\models\User;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use yii\db\ActiveRecord;
+use frontend\models\Comment;
 
 /**
  * This is the model class for table "post".
@@ -133,12 +134,17 @@ class Post extends ActiveRecord {
         $redis = Yii::$app->redis;
         return $redis->get("post:{$this->id}:comments");
     }
-
-    public function setCommentCounter() {
+    
+    protected function setCommentCounter(){
         $redis = Yii::$app->redis;
         $redis->set("post:{$this->id}:comments", 0);
     }
-
+    
+    public function afterSave($insert, $changedAttributes) {
+        $this->setCommentCounter();
+        parent::afterSave($insert, $changedAttributes);
+    }
+    
     /**
      * 
      * @return string

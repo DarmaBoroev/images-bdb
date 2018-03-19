@@ -9,7 +9,6 @@ use yii\web\UploadedFile;
 use frontend\models\Post;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use frontend\modules\post\models\forms\CommentForm;
 use frontend\models\Comment;
 
 /**
@@ -45,16 +44,16 @@ class DefaultController extends Controller {
     public function actionView($id) {
 
         $currentUser = Yii::$app->user->identity;
-        $commentModel = new CommentForm();
+        $commentModel = new Comment();
         
         if($commentModel->load(Yii::$app->request->post())) {
             $commentModel->save();
         }
         
         return $this->render('view', [
-                    'post' => $this->findPost($id),
-                    'commentModel' => $commentModel,
-                    'currentUser' => $currentUser,
+            'post' => $this->findPost($id),
+            'commentModel' => $commentModel,
+            'currentUser' => $currentUser,
         ]);
     }
     

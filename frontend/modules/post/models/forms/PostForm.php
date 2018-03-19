@@ -69,7 +69,6 @@ class PostForm extends Model{
             $post->filename = Yii::$app->storage->saveUploadedFile($this->picture);
             $post->user_id = $this->user->getId();
             if($post->save(false)){
-                $post->setCommentCounter();
                 $event = new PostCreatedEvent();
                 $event->user = $this->user;
                 $event->post = $post;
