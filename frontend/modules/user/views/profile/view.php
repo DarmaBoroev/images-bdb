@@ -42,7 +42,12 @@ $this->title = Html::encode($user->username);
                                 <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info" >Subscribe</a>
                             <?php endif;?>
                             <hr>
-                            <h5>Friends, who are also following <?php echo Html::encode($user->username); ?>: </h5>
+                            <h5>
+                                <?php
+                                echo Yii::t('menu', 'Friends, who are also following ');
+                                echo Html::encode($user->username);
+                                ?>:
+                            </h5>
                             <div class="row">
                                 <?php foreach ($currentUser->getMutualSubscribtionsTo($user) as $item): ?>
                                     <div class="col-md-12">

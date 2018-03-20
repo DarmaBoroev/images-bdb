@@ -14,6 +14,6 @@ use yii\helpers\Html;
         <?php echo $form->field($model, 'description')->label(Yii::t('post/create', 'Description'));?>
     
         <?php echo Html::submitButton(Yii::t('post/create', 'Create'));?>
-    
+        <br/><br/><br/><br/>
     <?php ActiveForm::end();?>
 </div>

@@ -69,6 +69,7 @@ FontAwesomeAsset::register($this);
                                 } else {
                                     $menuItems[] = ['label' => Yii::t('menu', 'My profile'), 'url' => ['/user/profile/view', 'nickname' => Yii::$app->user->identity->getNickname()]];
                                     $menuItems[] = ['label' => Yii::t('menu', 'Create post'), 'url' => ['/post/default/create']];
+                                    $menuItems[] = ['label' => Yii::t('menu', 'Other users'), 'url' => ['/user/default/view-users']];
                                     $menuItems[] = '<li>'
                                             . Html::beginForm(['/user/default/logout'], 'post')
                                             . Html::submitButton(

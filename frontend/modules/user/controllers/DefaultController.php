@@ -13,6 +13,7 @@ use frontend\modules\user\models\forms\PasswordResetRequestForm;
 use frontend\modules\user\models\forms\ResetPasswordForm;
 use frontend\modules\user\models\forms\SignupForm;
 use frontend\modules\user\components\AuthHandler;
+use frontend\models\User;
 
 
 /**
@@ -180,6 +181,16 @@ class DefaultController extends Controller
 
         return $this->render('resetPassword', [
             'model' => $model,
+        ]);
+    }
+    
+    public function actionViewUsers(){
+        $users = User::findAll(['status' => 10]);
+        $currentUser = Yii::$app->user->identity;
+        
+        return $this->render('viewUsers', [
+            'users' => $users,
+            'currentUser' => $currentUser,
         ]);
     }
 }
