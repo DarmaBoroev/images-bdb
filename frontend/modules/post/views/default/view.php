@@ -64,7 +64,16 @@ $this->registerJsFile('@web/js/comment.js', [
                                 <span><?php echo $post->getDate();?></span>    
                             </div>
                             <div class="post-report">
-                                <a href="#"><?php echo Yii::t('post/view', 'Report post');?></a>    
+                                <?php if (!$post->isReported($currentUser)): ?>
+                                    <a href="#" class="btn btn-default button-complain" data-id="<?php echo $post->getId(); ?>">
+                                        <?= Yii::t('post/view', 'Report post') ?> <i class="fa fa-cog fa-spin fa-fw icon-preloader" style="display:none"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <p><?= Yii::t('post/view', 'Post has been reported!') ?></p>
+                                <?php endif; ?>
+                            </div>
+                            <div class="post-delete">
+                                
                             </div>
                         </div>
                     </article>
@@ -134,3 +143,8 @@ $this->registerJsFile('@web/js/comment.js', [
     <br/><br/>
 </div>
 
+<?php
+$this->registerJsFile('@web/js/complaints.js', [
+    'depends' => JqueryAsset::className()
+]); 
+?>

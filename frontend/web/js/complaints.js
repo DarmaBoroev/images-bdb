@@ -6,7 +6,7 @@ $(document).ready(function(){
             'id': $(this).attr('data-id')
         };
         preloader.show();
-        $.post('post/default/complain', params, function(data){
+        $.post('/post/default/complain', params, function(data){
             preloader.hide();
             button.addClass('disabled');
             button.html(data.text);

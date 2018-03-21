@@ -113,7 +113,7 @@ class Post extends ActiveRecord {
     public function isLikedBy(User $user) {
         /* @var $redis Connection */
         $redis = Yii::$app->redis;
-        return $redis->sismember("likes:{$this->getId()}:likes", $user->getId());
+        return $redis->sismember("post:{$this->getId()}:likes", $user->getId());
     }
 
     /**
@@ -168,5 +168,11 @@ class Post extends ActiveRecord {
             $this->complaints++;
             return $this->save(false, ['complaints']);
         }
+    }
+    
+    public function isReported(User $user){
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        return (bool) $redis->sismember("post:{$this->getId()}:complaints", $user->getId());
     }
 }

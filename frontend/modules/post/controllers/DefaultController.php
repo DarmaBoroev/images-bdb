@@ -115,7 +115,6 @@ class DefaultController extends Controller {
         if(Yii::$app->user->isGuest){
             return $this->redirect(['/user/default/login']);
         }
-        
         Yii::$app->response->format = Response::FORMAT_JSON;
         
         $id = Yii::$app->request->post('id');
