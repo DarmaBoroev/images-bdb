@@ -7,7 +7,6 @@
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
-use dosamigos\fileupload\FileUpload;
 use yii\web\JqueryAsset;
 
 $this->title = Html::encode($user->username);
@@ -31,8 +30,6 @@ $this->title = Html::encode($user->username);
                             <br/>
                             <br/>
                             
-                            <div class="alert alert-success display-none" id="profile-image-success">Profile image updated</div>
-                            <div class="alert alert-danger display-none" id="profile-image-fail"></div>
                         </div>
                         
                         <?php if ($currentUser && !$currentUser->equals($user)): ?>

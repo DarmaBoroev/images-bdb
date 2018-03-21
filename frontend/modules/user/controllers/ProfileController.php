@@ -61,22 +61,23 @@ class ProfileController extends Controller {
         
         $currentUser = Yii::$app->user->identity;
         if($currentUser->deletePicture()){
-            Yii::$app->session->setFlash('success', 'Picture deleted');
+            Yii::$app->session->setFlash('success', Yii::t('user/update', 'Picture deleted'));
         }else{
             Yii::$app->session->setFlash('danger', 'Error occured');
         }
         
-        return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
+        return $this->redirect(['/user/profile/update']);
     }
     
     public function actionUpdate(){
         $user = Yii::$app->user->identity;
+        
         $model = new UpdateForm($user);
         $modelPicture = new PictureForm();
+        
         if($model->load(Yii::$app->request->post()) && $model->update()){
-            
-            Yii::$app->session->setFlash('success', 'Profile updated');
-            return $this->redirect(['/user/profile/view', 'nickname' => $user->getId()]);
+            Yii::$app->session->setFlash('success', Yii::t('user/update', 'Infromation about you changed'));
+            return $this->redirect(['/user/profile/update', 'nickname' => $user->getId()]);
         }
         
         return $this->render('update',[
@@ -91,8 +92,8 @@ class ProfileController extends Controller {
         $model = new PasswordChangeForm($user);
         
         if($model->load(Yii::$app->request->post()) && $model->changePassword()){
-            Yii::$app->session->setFlash('success', Yii::t('user/view', 'Password success changed'));
-            return $this->redirect(['/user/profile/update']);
+            Yii::$app->session->setFlash('success', Yii::t('user/update', 'Password success changed'));
+            return $this->refresh();
         }
         
         return $this->render('passwordChange', [

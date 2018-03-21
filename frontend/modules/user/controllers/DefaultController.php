@@ -184,6 +184,10 @@ class DefaultController extends Controller
         ]);
     }
     
+    /**
+     * View other users
+     * @return mixed
+     */
     public function actionViewUsers(){
         $users = User::findAll(['status' => 10]);
         $currentUser = Yii::$app->user->identity;

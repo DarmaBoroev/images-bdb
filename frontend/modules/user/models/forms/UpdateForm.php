@@ -3,7 +3,6 @@
 namespace frontend\modules\user\models\forms;
 use yii\base\Model;
 use frontend\models\User;
-use Yii;
 /**
  * Description of EditForm
  *

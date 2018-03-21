@@ -93,7 +93,7 @@ FontAwesomeAsset::register($this);
             </header>	
 
             <div class="container full">
-                <?= Alert::widget() ?>
+                <?php //Alert::widget(); ?>
                 <?= $content ?>
             </div>
             <div class="push"></div>
