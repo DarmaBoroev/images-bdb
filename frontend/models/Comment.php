@@ -33,7 +33,7 @@ class Comment extends \yii\db\ActiveRecord {
     {
         return [
             [['text', 'post_id', 'user_id'], 'required'],
-            [['text'], 'string'],
+            [['text'], 'string', 'length' => [3,250]],
         ];
     }
     

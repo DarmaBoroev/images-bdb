@@ -3,6 +3,7 @@
 /* @var $this yii\base\View */
 /* @var $currentUser frontend\models\User */
 /* @var $comments[] frontend\models\Comment */
+/* @var $model frontend\models\Comment */
 
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
@@ -17,6 +18,10 @@ $this->registerJsFile('@web/js/likes.js', [
 $this->registerJsFile('@web/js/comment.js', [
     'depends' => JqueryAsset::className()
 ]);
+
+$this->registerJsFile('@web/js/complaints.js', [
+    'depends' => JqueryAsset::className()
+]); 
 
 ?>
 
@@ -83,7 +88,22 @@ $this->registerJsFile('@web/js/comment.js', [
         </div>
     </div>
 </div>
-
+<div class="flash-messages">
+    <div class="col-md-12">
+        <?php if (Yii::$app->session->hasFlash('success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <?php echo Yii::$app->session->getFlash('success'); ?>
+            </div>
+        <?php endif; ?>
+        <?php if (Yii::$app->session->hasFlash('danger')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <?php echo Yii::$app->session->getFlash('danger'); ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
 <?php Pjax::begin(['id' => 'comments']);?>
     <div class="container">
         <div class="row">
@@ -93,8 +113,8 @@ $this->registerJsFile('@web/js/comment.js', [
                         <h3><small class="pull-right"><?php echo $post->countComments(); ?> </small><?php echo Yii::t('post/view', 'Comments');?> </h3>
                     </div> 
                     <div class="comments-list">
-
-                        <?php foreach ($post->getComments() as $comment): ?>
+                        
+                        <?php foreach ($post->comments as $comment): ?>
                             <div class="media">
                                 <p class="pull-right"><small><?php echo $comment->getDate(); ?></small></p>
                                 <a class="" href="<?php echo Url::to(['/user/profile/view', 'nickname' => $comment->user->getNickname()]); ?>">
@@ -105,7 +125,8 @@ $this->registerJsFile('@web/js/comment.js', [
                                     <h4 class="media-heading user_name"><?php echo Html::encode($comment->user->username); ?></h4>
                                     <?php echo Html::encode($comment->text); ?>
                                     
-                                    <p><small></a><a href=""></a></small></p>
+                                    
+                                    <p><small><a href="<?= Url::to(['/post/default/delete-comment', 'id' => $comment->id]) ?>" class="delete-comment"><?= Yii::t('post/view', 'delete')?></a></small></p>
                                 </div>
                                     
                             </div>
@@ -117,6 +138,7 @@ $this->registerJsFile('@web/js/comment.js', [
         </div>
     </div>
 <?php Pjax::end();?>
+
 <br/><br/>
 <div class="col-sm-12 col-xs-12">
     <div class="comment-respond">
@@ -142,9 +164,3 @@ $this->registerJsFile('@web/js/comment.js', [
     </div>
     <br/><br/>
 </div>
-
-<?php
-$this->registerJsFile('@web/js/complaints.js', [
-    'depends' => JqueryAsset::className()
-]); 
-?>

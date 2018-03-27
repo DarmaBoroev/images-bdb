@@ -121,9 +121,7 @@ class Post extends ActiveRecord {
      * @return array
      */
     public function getComments() {
-        $condition1 = ['post_id' => $this->id];
-        $condition2 = ['status' => 1];
-        return Comment::find()->where($condition1)->andWhere($condition2)->all();
+        return $this->hasMany(Comment::className(), ['post_id' => 'id']);
     }
 
     /**

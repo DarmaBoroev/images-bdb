@@ -10,6 +10,7 @@ use frontend\models\Post;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use frontend\models\Comment;
+use frontend\models\User;
 
 /**
  * Default controller for the `post` module
@@ -55,6 +56,18 @@ class DefaultController extends Controller {
             'commentModel' => $commentModel,
             'currentUser' => $currentUser,
         ]);
+    }
+    
+    public function actionDeleteComment($id){
+        $comment = $this->findComment($id);
+        
+        if($comment->delete()){
+            Yii::$app->session->setFlash('success', Yii::t('post/view', 'Your comment deleted'));
+            return $this->redirect(['/post/default/view', 'id' => $comment->post_id]);
+        }
+        
+        Yii::$app->session->setFlash('danger', Yii::t('post/view', 'Failed to delete comment'));
+        return $this->redirect(['/post/default/view', 'id' => $comment->post_id]);
     }
     
     /**
@@ -146,6 +159,13 @@ class DefaultController extends Controller {
     private function findPost($id) {
         if ($post = Post::findOne($id)) {
             return $post;
+        }
+        throw new NotFoundHttpException();
+    }
+    
+    private function findComment($id){
+        if($comment = Comment::findOne($id)){
+            return $comment;
         }
         throw new NotFoundHttpException();
     }
