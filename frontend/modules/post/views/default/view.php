@@ -77,8 +77,10 @@ $this->registerJsFile('@web/js/complaints.js', [
                                     <p><?= Yii::t('post/view', 'Post has been reported!') ?></p>
                                 <?php endif; ?>
                             </div>
-                            <div class="post-delete">
-                                
+                            <div class="post-report">
+                                <?php if($currentUser->equals($post->user)):?>
+                                    <a href="<?= Url::to(['/post/default/delete', 'id' => $post->id]) ?>" class="btn btn-default button-delete"><?= Yii::t('post/view', 'Delete post') ?></a> 
+                                <?php endif;?>
                             </div>
                         </div>
                     </article>
@@ -125,8 +127,9 @@ $this->registerJsFile('@web/js/complaints.js', [
                                     <h4 class="media-heading user_name"><?php echo Html::encode($comment->user->username); ?></h4>
                                     <?php echo Html::encode($comment->text); ?>
                                     
-                                    
-                                    <p><small><a href="<?= Url::to(['/post/default/delete-comment', 'id' => $comment->id]) ?>" class="delete-comment"><?= Yii::t('post/view', 'delete')?></a></small></p>
+                                    <?php if($currentUser->equals($comment->user)): ?>
+                                        <p><small><a href="<?= Url::to(['/post/default/delete-comment', 'id' => $comment->id]) ?>" class="delete-comment"><?= Yii::t('post/view', 'delete')?></a></small></p>
+                                    <?php endif;?>
                                 </div>
                                     
                             </div>

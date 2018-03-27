@@ -22,19 +22,34 @@ class DefaultController extends Controller {
      * @return string
      */
     public function actionCreate() {
-        $model = new PostForm(Yii::$app->user->identity);
-
+        $currentUser = Yii::$app->user->identity;
+        $model = new PostForm($currentUser);
+        
         if ($model->load(Yii::$app->request->post())) {
             $model->picture = UploadedFile::getInstance($model, 'picture');
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Post created');
-                return $this->goHome();
+                return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
             }
         }
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+    
+    public function actionDelete($id){
+        $post = $this->findPost($id);
+        
+        /* @var $currentUser User */
+        $currentUser = Yii::$app->user->identity;
+        
+        if($post->delete()){
+            Yii::$app->session->setFlash('success', 'Post deleted');
+        } else {
+            Yii::$app->session->setFlash('danger', 'Failed to post delete');
+        }
+        return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
     }
 
     /**
